@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1577150606 source:c:\users\ahmed\desktop\ffff pro\phonebookproject\main.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	<string.h>
+	<ctype.h>
+	"persons.h"
+	"inputAndValidation.h"
+	"fileLoadAndSave.h"
+	"printingAndSorting.h"
+
+1576965270 c:\users\ahmed\desktop\ffff pro\phonebookproject\persons.h
+
+1577025002 c:\users\ahmed\desktop\ffff pro\phonebookproject\inputandvalidation.h
+
+1577026454 c:\users\ahmed\desktop\ffff pro\phonebookproject\fileloadandsave.h
+
+1576965004 c:\users\ahmed\desktop\ffff pro\phonebookproject\printingandsorting.h
+

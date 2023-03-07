@@ -1,0 +1,82 @@
+void input_date(int* datePtr,int MIN,int MAX )
+{
+    char tempDate[6];
+    do
+    {
+        switch(MAX){
+        case 31: strcpy(tempDate,"day"); break;
+        case 12: strcpy(tempDate,"month"); break;
+        case 2019: strcpy(tempDate,"year"); break;
+        }
+
+        printf("Enter the %s:\n",tempDate);
+        scanf("%s",tempDate);
+        *datePtr=(validate_date(tempDate,MIN,MAX));
+        if(!(*datePtr))
+            printf("Invalid Date\n");
+    }
+    while(!(*datePtr));
+}
+int validate_date(char* number,int Min,int Max)
+{
+    int validNumber;
+    for (char* ptr = number; *ptr; ptr++)
+        if(!(isdigit(*ptr)))
+            return 0;
+
+    sscanf(number, "%d",&validNumber);
+    if(validNumber>=Min && validNumber<=Max)
+        return validNumber;
+    else
+        return 0;
+}
+
+void input_email(char* emailPtr)
+{
+    do
+    {
+        printf("Enter the e-mail:\n");
+        scanf("%s",emailPtr);
+        if(!(validate_email(emailPtr)))
+            printf("Invalid email\n");
+    }
+    while(!(validate_email(emailPtr)));
+}
+int validate_email(char* email)
+{
+    char check='F';
+    for (char* ptr = email; *ptr; ptr++)
+    {
+        if(*ptr == ' ')
+            return 0;
+        if(*ptr == '@' && email[0]!='@')
+            check='T';
+        if(*ptr == '.' && check=='T' && *(ptr-1)!='@' )
+            return 1;
+    }
+    return 0;
+}
+
+void input_phone(char* numberPtr)
+{
+    char temp;
+    do
+    {
+        printf("Enter the phone number:\n");
+        scanf("%c",&temp);
+        scanf("%[^\n]",numberPtr);
+        if(!(validate_number(numberPtr)))
+            printf("Invalid Phone Number\n");
+    }
+    while(!(validate_number(numberPtr)));
+}
+
+int validate_number(char* number)
+{
+    for (char* ptr = number; *ptr; ptr++)
+        if(!(isdigit(*ptr) || *ptr=='+' || *ptr== '-'))
+            return 0;
+    return 1;
+}
+
+

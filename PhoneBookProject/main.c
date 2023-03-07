@@ -1,0 +1,295 @@
+//Libraries :
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+#include <string.h>
+#include <ctype.h>
+//Headers :
+#include "persons.h"
+#include "inputAndValidation.h"
+#include "fileLoadAndSave.h"
+#include "printingAndSorting.h"
+
+void Menu();
+void Add();
+void Search();
+void Delete();
+void Modify();
+void Quit();
+
+int main()
+{
+    Load();
+    Menu();
+    return 0;
+}
+
+void Menu()
+{
+    system("cls");
+    system("color 3f");//Blue color
+    printf("\t\t\t  Menu\t\t\n\n");
+    printf("\t(1)Search   \t(2)Add   \t(3)Delete\n\t(4)Modify   \t(5)Print   \t(6)Save\n\t\t\t(7)Quit\n");
+    printf("\n \t \t   Choice from 1 to 7:\n");
+    switch(getch())//get only one char
+    {
+    case '1':   Search();   break;
+    case '2':   Add();      break;
+    case '3':   Delete();   break;
+    case '4':   Modify();   break;
+    case '5':   Print();    break;
+    case '6':   Save();     break;
+    case '7':   Quit();     break;
+    default:
+        system("cls");//clear the output screen
+        system("color 4f");
+        printf("\n\aWrong Entry\n");
+        printf("Press any key to continue:\n");
+        getch();
+        Menu();
+    }
+}
+
+void Add()
+{
+    system("cls");
+    char temp;
+
+    printf("Enter the last name:\n");
+    scanf("%s",p[count].lastname);
+
+    printf("Enter the first name:\n");
+    scanf("%s",p[count].firstname);
+
+    printf("Enter the date of birth:\n");
+    input_date(&p[count].dob.day,1,31);//input and validate date
+    input_date(&p[count].dob.month,1,12);
+    input_date(&p[count].dob.year,1900,2019);
+
+    printf("Enter the address:\n");
+    scanf("%c",&temp);
+    scanf("%[^\n]",p[count].address);
+
+    input_email(&p[count].email);//input and validate e-mail
+
+    input_phone(&p[count].phonenumber);//input and validate phone
+
+    count++;
+    printf("Press any key to continue:\n");
+    getch();
+    system("cls");
+    check=0;
+    Menu();
+}
+
+void Search()
+{
+    system("cls");
+    person search;
+    int flag=0;
+    char temp;
+
+    printf("\t\t\t\tSearch By:\n");
+    printf("\n(1)Last name\t\t\t(2)First Name\t\t\t(3)Date of Birth\n");
+    printf("(4)Address\t\t\t(5)Email\t\t\t(6)Phone Number\n");
+
+    switch(getch())
+    {
+    case '1':
+        printf("Enter the last name:\n");
+        scanf("%s",search.lastname);
+        for(int i=0; i<count; i++)
+            if(strcasecmp(search.lastname,p[i].lastname)==0)
+            {
+                printContact(i);
+                flag++;
+            }
+        break;
+    case '2':
+        printf("Enter the first name:\n");
+        scanf("%s",search.firstname);
+        for(int i=0; i<count; i++)
+            if(strcasecmp(search.firstname,p[i].firstname)==0)
+            {
+                printContact(i);
+                flag++;
+            }
+        break;
+    case '3':
+        printf("Enter the date of birth:\n");
+        input_date(&search.dob.day,1,31);
+        input_date(&search.dob.month,1,12);
+        input_date(&search.dob.year,1900,2019);
+        for(int i=0; i<count; i++)
+            if(search.dob.day==p[i].dob.day && search.dob.month==p[i].dob.month && search.dob.year==p[i].dob.year)
+            {
+                printContact(i);
+                flag++;
+            }
+        break;
+    case '4':
+        printf("Enter the new address:\n");
+        scanf("%c",&temp);
+        scanf("%[^\n]",search.address);
+        for(int i=0; i<count; i++)
+            if(strcasecmp(search.address,p[i].address)==0)
+            {
+                printContact(i);
+                flag++;
+            }
+        break;
+    case '5':
+        input_email(search.email);
+        for(int i=0; i<count; i++)
+            if(strcasecmp(search.email,p[i].email)==0)
+            {
+                printContact(i);
+                flag++;
+            }
+        break;
+    case '6':
+        input_phone(search.phonenumber);
+        for(int i=0; i<count; i++)
+            if(strcasecmp(search.phonenumber,p[i].phonenumber)==0)
+            {
+                printContact(i);
+                flag++;
+            }
+        break;
+    default:
+        printf("\n\aWrong Entry\n");
+        flag++;
+        break;
+    }
+    if(!flag)
+        printf("\nContact not found\n");
+    printf("Press any key to continue:\n");
+    getch();
+    Menu();
+}
+
+void Delete()
+{
+    system("cls");
+    char lname[20];
+    char fname[20];
+    int flag=0;
+    printf("Enter the last name: ");
+    scanf("%s",lname);
+    printf("Enter the first name: ");
+    scanf("%s",fname);
+    for(int i=0; i<count; i++)
+        if(strcasecmp(lname,p[i].lastname)==0&&strcasecmp(fname,p[i].firstname)==0)
+        {
+            p[i]=p[count-1];
+            count--;
+            flag++;
+        }
+    if(!flag)
+        printf("\nContact not found\n");
+    else
+        printf("\nContact Deleted\n");
+    printf("Press any key to continue:\n");
+    getch();
+    check=0;
+    Menu();
+}
+
+void Modify()
+{
+    system("cls");
+    char temp;
+    char lname[20];
+    int index=0;
+    int a[count];
+    printf("Enter the last name: ");
+    scanf("%s",lname);
+    for(int i=0; i<count; i++)
+        if(strcasecmp(lname,p[i].lastname)==0)
+        {
+            index++;
+            printf("(%d)%s\t",index,p[i].firstname);
+            a[index-1]=i;
+        }
+    if(index)
+    {
+        printf("\nEnter the number of the person that you want to modify:");
+        scanf("%d",&index);
+        system("cls");
+        printf("\n(1)Modify Last name\t\t\t(2)Modify First Name\t\t\t(3)Modify Date of Birth\n");
+        printf("(4)Modify Address\t\t\t(5)Modify Email\t\t\t\t(6)Modify Phone Number\n");
+        switch(getch())
+        {
+        case '1':
+            printf("Enter the new last name:\n");
+            scanf("%s",p[a[index-1]].lastname);
+            break;
+        case '2':
+            printf("Enter the new first name:\n");
+            scanf("%s",p[a[index-1]].firstname);
+            break;
+        case '3':
+            printf("Enter the new date of birth:\n");
+            input_date(&p[a[index-1]].dob.day,1,31);
+            input_date(&p[a[index-1]].dob.month,1,12);
+            input_date(&p[a[index-1]].dob.year,1900,2019);
+            break;
+        case '4':
+            printf("Enter the new address:\n");
+            scanf("%c",&temp);
+            scanf("%[^\n]",p[a[index-1]].address);
+            break;
+        case '5':
+            input_email(&p[a[index-1]].email);
+            break;
+        case '6':
+            input_phone(&p[a[index-1]].phonenumber);
+            break;
+        default:
+            printf("\nWrong Entry\n");
+            break;
+        }
+    }
+    else
+        printf("\nContact not found\n");
+
+    printf("Press any key to continue:\n");
+    getch();
+    check=0;
+    Menu();
+}
+
+void Quit()
+{
+    system("cls");
+    if(!check)
+    {
+        system("color 4f");//Red color
+        printf("\n\a\a\a\a\a\a\aWarning all changes will be Discarded!\n");
+        printf("(1)Back to Menu\t\t\t(2)Quit Anyway\t\t\t(3)Save the changes\n");
+        switch(getch())
+        {
+        case '1':
+            Menu();
+            break;
+        case '2':
+            printf("See You Later :)\n");
+            exit(0);
+            break;
+        case '3':
+            Save();
+            break;
+        default:
+            system("color 4f");
+            printf("\n\a\a\a\aWrong Entry\n");
+            printf("Press any key to continue:\n");
+            getch();
+            Menu();
+        }
+    }
+    else
+    {
+        printf("See You Later :)\n");
+        exit(0);
+    }
+}
